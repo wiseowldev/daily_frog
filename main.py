@@ -26,11 +26,11 @@ def main(wh_id, wh_token, wh_url, api_token, api_base):
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
-    import schedule
-    import time
+    import logging
     
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(msg)s")
     is_gha = bool(int(os.environ.get("GHA", "0")))
-    print("Called by action:", is_gha)
+    logging.info("Called by workflow:", is_gha)
     
     if is_gha:
         load_dotenv()
@@ -41,24 +41,10 @@ if __name__ == "__main__":
     pexels_api_token = os.environ.get("PEXELS_API_TOKEN")
     pexels_api_base = os.environ.get("PEXELS_API_BASE")
     
-    if is_gha:
-        schedule.every().day.at("10:00").do(
-            main,
-            discord_webhook_id,
-            discord_webhook_token,
-            discord_webhook_url,
-            pexels_api_token,
-            pexels_api_base
-        )
-        
-        while True:
-            schedule.run_pending()
-            time.sleep(60)
-    else:
-        main(
-            discord_webhook_id,
-            discord_webhook_token,
-            discord_webhook_url,
-            pexels_api_token,
-            pexels_api_base
-        )
+    main(
+        discord_webhook_id,
+        discord_webhook_token,
+        discord_webhook_url,
+        pexels_api_token,
+        pexels_api_base
+    )
