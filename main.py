@@ -30,7 +30,7 @@ if __name__ == "__main__":
     
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(msg)s")
     is_gha = bool(int(os.environ.get("GHA", "0")))
-    logging.info("Called by workflow:", is_gha)
+    logging.info(f"Called by workflow: {is_gha}")
     
     if is_gha:
         load_dotenv()
