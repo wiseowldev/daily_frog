@@ -30,6 +30,7 @@ if __name__ == "__main__":
     import time
     
     is_gha = bool(int(os.environ.get("GHA", "0")))
+    print("Called by action:", is_gha)
     
     if is_gha:
         load_dotenv()

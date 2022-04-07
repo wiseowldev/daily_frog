@@ -24,7 +24,7 @@ jobs:
 
       - name: run script
         env:
-          GHA: 1
+          GHA: "1"
           DISCORD_WEBHOOK_ID: ${{secrets.DISCORD_WEBHOOK_ID}}
           DISCORD_WEBHOOK_TOKEN: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
           DISCORD_WEBHOOK_BASE: ${{secrets.DISCORD_WEBHOOK_BASE}}
