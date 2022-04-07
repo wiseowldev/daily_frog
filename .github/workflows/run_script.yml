@@ -1,0 +1,27 @@
+name: run_main
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: python setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.12'
+      
+      - name: run script
+        env:
+          GHA: 1
+          DISCORD_WEBHOOK_ID: ${{secrets.DISCORD_WEBHOOK_ID}}
+          DISCORD_WEBHOOK_TOKEN: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
+          DISCORD_WEBHOOK_BASE: ${{secrets.DISCORD_WEBHOOK_BASE}}
+          PEXELS_API_TOKEN: ${{secrets.PEXELS_API_TOKEN}}
+          PEXELS_API_BASE: ${{secrets.PEXELS_API_BASE}}
+        run: python main.py

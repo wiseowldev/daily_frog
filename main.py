@@ -28,7 +28,11 @@ if __name__ == "__main__":
     from dotenv import load_dotenv
     import schedule
     import time
-    load_dotenv()
+    
+    is_gha = bool(int(os.environ.get("GHA", "0")))
+    
+    if is_gha:
+        load_dotenv()
     
     discord_webhook_id = os.environ.get("DISCORD_WEBHOOK_ID")
     discord_webhook_token = os.environ.get("DISCORD_WEBHOOK_TOKEN")
@@ -36,15 +40,24 @@ if __name__ == "__main__":
     pexels_api_token = os.environ.get("PEXELS_API_TOKEN")
     pexels_api_base = os.environ.get("PEXELS_API_BASE")
     
-    schedule.every().day.at("10:00").do(
-        main,
-        discord_webhook_id,
-        discord_webhook_token,
-        discord_webhook_url,
-        pexels_api_token,
-        pexels_api_base
-    )
-    
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+    if is_gha:
+        schedule.every().day.at("10:00").do(
+            main,
+            discord_webhook_id,
+            discord_webhook_token,
+            discord_webhook_url,
+            pexels_api_token,
+            pexels_api_base
+        )
+        
+        while True:
+            schedule.run_pending()
+            time.sleep(60)
+    else:
+        main(
+            discord_webhook_id,
+            discord_webhook_token,
+            discord_webhook_url,
+            pexels_api_token,
+            pexels_api_base
+        )
