@@ -1,12 +1,14 @@
-from random import choice
+from random import seed, choice
+from time import time
 import requests
 import os
 
 
 def get_frog(pexels_api_base, pexels_token):
-    req_url = pexels_api_base + "/search?query=frog&per_page=30"
+    req_url = pexels_api_base + "/search?query=frog&per_page=100"
     res = requests.get(req_url, headers = dict(Authorization = pexels_api_token))
     if res.status_code < 300:
+        random.seed(int(time()))
         return choice(res.json()["photos"])
 
 def send_frog(frog, webhook):
