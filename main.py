@@ -39,9 +39,11 @@ class DiscordWebhookService:
                 "file": (filename, fbytes)
             })
             if not response.ok:
-                raise f"failed to send file, response code {response.status_code}"
+                self.__logger.error(f"failed to send file, response code {response.status_code}")
+                return -1
         except Exception as e:
-            self.__logger.error(str(e))
+            self.__logger.error(f"An error of type '{type(e).__name__}' occurred")
+            return -1
 
 
 if __name__ == "__main__":
@@ -80,4 +82,5 @@ if __name__ == "__main__":
             logger.error(f"failed to fetch '{image_name}' from <{image_url}>, code {response.status_code}")
             exit(1)
 
-        DiscordWebhookService.send_file(image_name, response.content)
+        if DiscordWebhookService.send_file(image_name, response.content) == -1:
+            exit(1)
