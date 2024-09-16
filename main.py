@@ -53,12 +53,12 @@ if __name__ == "__main__":
                         format="[%(name)s] %(levelname)s: %(msg)s")
     logger = logging.getLogger("main")
     
-    action = os.environ.get("GITHUB_ACTION")
+    action = os.environ.get("GITHUB_EVENT_NAME")
     if action != None:
-        logger.info(f"Running from '{action}' workflow")
+        logger.info(f"Triggered by '{action}'")
         load_dotenv()
     else:
-        logger.info("Running from commandline")
+        logger.info("Not running from github actions")
         load_dotenv("./.env")
 
     if (discord_webhook_url := os.environ.get("DISCORD_WEBHOOK")) is None:
