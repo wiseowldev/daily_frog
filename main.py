@@ -1,52 +1,82 @@
 from random import seed, choice
 from time import time
 import requests
-import os
+import logging
+
+class PexelsService:
+    BASE_URL = "https://api.pexels.com"
+
+    def __init__(self, api_token: str):
+        self.__api_token = api_token
+        self.__logger = logging.getLogger(self.__class__.__name__)
+
+    def search_image(self, query: str):
+        url = f"{self.BASE_URL}/v1/search"
+        params = {"query":  query.encode("utf-8")}
+        headers = {"Authorization": self.__api_token}
+        response = requests.get(url, params=params, headers=headers)
+
+        if not response.ok:
+            self.__logger.error(f"pexels api responded with code {response.status_code}")
+            return
+
+        seed(time())
+        return choice(response.json()["photos"])
 
 
-def get_frog(pexels_api_base, pexels_token):
-    req_url = pexels_api_base + "/search?query=frog&per_page=100"
-    res = requests.get(req_url, headers = dict(Authorization = pexels_api_token))
-    if res.status_code < 300:
-        seed(int(time()))
-        return choice(res.json()["photos"])
+class DiscordWebhookService:
+    BASE_URL = "https://discord.com/api/webhooks"
 
-def send_frog(frog, webhook):
-    image_url = frog["src"]["original"]
-    image_name = os.path.basename(image_url)
-    image_data = requests.get(image_url).content
-    requests.post(
-        f"{discord_webhook_url}/{discord_webhook_id}/{discord_webhook_token}", 
-        files=dict(
-            file = (image_name, image_data)
-        )
-    )
+    def __init__(self, channelId, token):
+        self.__channelId = channelId
+        self.__token = token
+        self.__logger = logging.getLogger(self.__class__.__name__)
 
-def main(wh_id, wh_token, wh_url, api_token, api_base):
-    webhook = f"{wh_url}/{wh_id}/{wh_token}"
-    send_frog(get_frog(api_base, api_token), webhook)
+    def send_file(self, filename: str, fbytes: bytes):
+        try:
+            url = f"{self.BASE_URL}/{self.__channelId}/{self.__token}"
+            response = requests.post(url, files={
+                "file": (filename, fbytes)
+            })
+            if not response.ok:
+                raise f"failed to send file, response code {response.status_code}"
+        except Exception as e:
+            self.__logger.error(str(e))
+
 
 if __name__ == "__main__":
+    import os
     from dotenv import load_dotenv
-    import logging
-    
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(msg)s")
-    is_gha = bool(int(os.environ.get("GHA", "0")))
-    logging.info(f"Called by workflow: {is_gha}")
-    
-    if is_gha:
-        load_dotenv()
-    
-    discord_webhook_id = os.environ.get("DISCORD_WEBHOOK_ID")
-    discord_webhook_token = os.environ.get("DISCORD_WEBHOOK_TOKEN")
-    discord_webhook_url = os.environ.get("DISCORD_WEBHOOK_BASE")
-    pexels_api_token = os.environ.get("PEXELS_API_TOKEN")
-    pexels_api_base = os.environ.get("PEXELS_API_BASE")
-    
-    main(
-        discord_webhook_id,
-        discord_webhook_token,
-        discord_webhook_url,
-        pexels_api_token,
-        pexels_api_base
+    load_dotenv("./.env")
+    logging.basicConfig(level=logging.INFO,
+                        format="[%(name)s] %(levelname)s: %(msg)s")
+    logger = logging.getLogger("main")
+
+    if (discord_webhook_url := os.environ.get("DISCORD_WEBHOOK")) is None:
+        logger.error("Missing environment variable 'DISCORD_WEBHOOK'")
+
+    if (pexels_api_token := os.environ.get("PEXELS_TOKEN")) is None:
+        logger.error("Missing environment variable 'PEXELS_TOKEN'")
+
+    response = requests.get(discord_webhook_url)
+    if not response.ok:
+        logger.error(f"Could not retrieve webhook information, code {response.status_code}")
+        exit(1)
+
+    webhook_data = response.json()
+    pexels_service = PexelsService(pexels_api_token)
+    webhook_service = DiscordWebhookService(
+        webhook_data["channel_id"], 
+        webhook_data["token"]
     )
+
+    pexels_response = pexels_service.search_image("frog")
+    if pexels_response != None:
+        image_url = pexels_response["src"]["original"]
+        image_name = os.path.basename(image_url)
+        response = requests.get(image_url)
+        if not response.ok:
+            logger.error(f"failed to fetch '{image_name}' from <{image_url}>, code {response.status_code}")
+            exit(1)
+
+        DiscordWebhookService.send_file(image_name, response.content)
