@@ -70,7 +70,7 @@ if __name__ == "__main__":
     response = requests.get(discord_webhook_url)
     if not response.ok:
         logger.error(f"Could not retrieve webhook information, code {response.status_code}")
-        exit(1)
+        exit(-1)
 
     webhook_data = response.json()
     pexels_service = PexelsService(pexels_api_token)
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         response = requests.get(image_url)
         if not response.ok:
             logger.error(f"failed to fetch '{image_name}' from <{image_url}>, code {response.status_code}")
-            exit(1)
+            exit(-1)
 
         if DiscordWebhookService.send_file(image_name, response.content) == -1:
-            exit(1)
+            exit(-1)
