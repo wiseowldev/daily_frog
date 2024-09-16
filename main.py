@@ -47,7 +47,8 @@ class DiscordWebhookService:
 if __name__ == "__main__":
     import os
     from dotenv import load_dotenv
-    load_dotenv("./.env")
+    load_dotenv() if os.environ.get("GITHUB_ACTIONS", "false") == "true" else load_dotenv("./.env")
+
     logging.basicConfig(level=logging.INFO,
                         format="[%(name)s] %(levelname)s: %(msg)s")
     logger = logging.getLogger("main")
