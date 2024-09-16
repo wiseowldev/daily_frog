@@ -49,11 +49,17 @@ class DiscordWebhookService:
 if __name__ == "__main__":
     import os
     from dotenv import load_dotenv
-    load_dotenv() if os.environ.get("GITHUB_ACTIONS", "false") == "true" else load_dotenv("./.env")
-
     logging.basicConfig(level=logging.INFO,
                         format="[%(name)s] %(levelname)s: %(msg)s")
     logger = logging.getLogger("main")
+    
+    action = os.environ.get("GITHUB_ACTION")
+    if action != None:
+        logger.info(f"Running from '{action}' workflow")
+        load_dotenv()
+    else:
+        logger.info("Running from commandline")
+        load_dotenv("./.env")
 
     if (discord_webhook_url := os.environ.get("DISCORD_WEBHOOK")) is None:
         logger.error("Missing environment variable 'DISCORD_WEBHOOK'")
