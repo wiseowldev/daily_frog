@@ -1,0 +1,27 @@
+{
+  "name": "daily_frog",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "swc ./src -d ./dist && node --env-file=.env ./dist/src",
+    "start": "node src",
+    "start:build": "npm run build && node ./dist/src",
+    "clean": "rimraf ./dist",
+    "build": "npm-run-all fmt clean && swc ./src -d ./dist",
+    "fmt": "npx prettier --write src",
+    "fmt:check": "npx prettier --check src",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@swc/cli": "^0.4.1-nightly.20240914",
+    "@swc/core": "^1.7.26",
+    "@types/node": "^22.5.5",
+    "husky": "^9.1.6",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1"
+  }
+}

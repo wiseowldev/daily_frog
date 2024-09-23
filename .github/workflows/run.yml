@@ -1,0 +1,24 @@
+name: run
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * *"
+    - cron: "0 11 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: node setup
+        uses: actions/setup-node@v4
+
+      - name: run
+        run: npm run start
+        working-directory: dist
+        env:
+          DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+          PEXELS_API_TOKEN: ${{secrets.PEXELS_API_TOKEN}}
