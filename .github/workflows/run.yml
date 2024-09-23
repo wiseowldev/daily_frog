@@ -16,9 +16,8 @@ jobs:
       - name: node setup
         uses: actions/setup-node@v4
 
-      - name: run
-        run: npm run start
-        working-directory: dist
+      - name: run script
+        run: npm start
         env:
           DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
           PEXELS_API_TOKEN: ${{secrets.PEXELS_API_TOKEN}}

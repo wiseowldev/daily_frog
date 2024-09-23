@@ -7,8 +7,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "swc ./src -d ./dist && node --env-file=.env ./dist/src",
-    "start": "node src",
-    "start:build": "npm run build && node ./dist/src",
+    "start": "node ./dist/src",
+    "start:build": "npm run build && npm start",
     "clean": "rimraf ./dist",
     "build": "npm-run-all fmt clean && swc ./src -d ./dist",
     "fmt": "npx prettier --write src",
