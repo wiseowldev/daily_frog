@@ -16,7 +16,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@swc/cli": "^0.4.1-nightly.20240914",
+    "@swc/cli": "^0.7.9",
     "@swc/core": "^1.7.26",
     "@types/node": "^22.5.5",
     "husky": "^9.1.6",

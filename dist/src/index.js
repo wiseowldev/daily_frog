@@ -28,7 +28,7 @@ function _async_to_generator(fn) {
     };
 }
 function _ts_generator(thisArg, body) {
-    var f, y, t, g, _ = {
+    var f, y, t, _ = {
         label: 0,
         sent: function() {
             if (t[0] & 1) throw t[1];
@@ -36,13 +36,17 @@ function _ts_generator(thisArg, body) {
         },
         trys: [],
         ops: []
-    };
-    return g = {
-        next: verb(0),
-        "throw": verb(1),
-        "return": verb(2)
-    }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -54,7 +58,7 @@ function _ts_generator(thisArg, body) {
     }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while(_)try {
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [
                 op[0] & 2,
@@ -126,10 +130,7 @@ import WebhookService from "./services/discord/webhooks.js";
 import { PexelsPhotoService } from "./services/pexels/photos.js";
 var pexelsService, webhookService;
 function getRandomPexelsItem() {
-    return _getRandomPexelsItem.apply(this, arguments);
-}
-function _getRandomPexelsItem() {
-    _getRandomPexelsItem = _async_to_generator(function() {
+    return _async_to_generator(function() {
         var res;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
@@ -151,14 +152,10 @@ function _getRandomPexelsItem() {
                     ];
             }
         });
-    });
-    return _getRandomPexelsItem.apply(this, arguments);
+    })();
 }
 function main() {
-    return _main.apply(this, arguments);
-}
-function _main() {
-    _main = _async_to_generator(function() {
+    return _async_to_generator(function() {
         var apiToken, webhook, image, embed;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
@@ -227,7 +224,6 @@ function _main() {
                     ];
             }
         });
-    });
-    return _main.apply(this, arguments);
+    })();
 }
 main().catch(console.error);

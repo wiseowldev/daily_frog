@@ -75,7 +75,7 @@ function _object_spread(target) {
     return target;
 }
 function _ts_generator(thisArg, body) {
-    var f, y, t, g, _ = {
+    var f, y, t, _ = {
         label: 0,
         sent: function() {
             if (t[0] & 1) throw t[1];
@@ -83,13 +83,17 @@ function _ts_generator(thisArg, body) {
         },
         trys: [],
         ops: []
-    };
-    return g = {
-        next: verb(0),
-        "throw": verb(1),
-        "return": verb(2)
-    }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -101,7 +105,7 @@ function _ts_generator(thisArg, body) {
     }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while(_)try {
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [
                 op[0] & 2,
@@ -181,7 +185,6 @@ var WebhookService = /*#__PURE__*/ function() {
         {
             key: "init",
             value: function init(webhook) {
-                var _this = this;
                 return _async_to_generator(function() {
                     var response, message, data;
                     return _ts_generator(this, function(_state) {
@@ -211,15 +214,15 @@ var WebhookService = /*#__PURE__*/ function() {
                                 ];
                             case 4:
                                 data = _state.sent();
-                                _this.__token = data["token"];
-                                _this.__webhookId = data["id"];
+                                this.__token = data["token"];
+                                this.__webhookId = data["id"];
                                 return [
                                     2,
-                                    _this
+                                    this
                                 ];
                         }
                     });
-                })();
+                }).call(this);
             }
         },
         {
@@ -231,9 +234,8 @@ var WebhookService = /*#__PURE__*/ function() {
         {
             key: "send_embeds",
             value: function send_embeds(embeds, attachments) {
-                var _this = this;
                 return _async_to_generator(function() {
-                    var i, headers, _attachments_length, data, res, message;
+                    var _ref, i, headers, data, res, message;
                     return _ts_generator(this, function(_state) {
                         switch(_state.label){
                             case 0:
@@ -245,12 +247,12 @@ var WebhookService = /*#__PURE__*/ function() {
                                 };
                                 data = _object_spread({
                                     embeds: embeds
-                                }, ((_attachments_length = attachments === null || attachments === void 0 ? void 0 : attachments.length) !== null && _attachments_length !== void 0 ? _attachments_length : 0) > 0 && {
+                                }, ((_ref = attachments === null || attachments === void 0 ? void 0 : attachments.length) !== null && _ref !== void 0 ? _ref : 0) > 0 && {
                                     attachments: attachments
                                 } || {});
                                 return [
                                     4,
-                                    fetch(_this.getWebhookUrl(), {
+                                    fetch(this.getWebhookUrl(), {
                                         method: "POST",
                                         headers: headers,
                                         body: JSON.stringify(data)
@@ -275,7 +277,7 @@ var WebhookService = /*#__PURE__*/ function() {
                                 ];
                         }
                     });
-                })();
+                }).call(this);
             }
         }
     ]);

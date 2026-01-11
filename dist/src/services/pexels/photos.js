@@ -106,7 +106,7 @@ function _unsupported_iterable_to_array(o, minLen) {
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
 }
 function _ts_generator(thisArg, body) {
-    var f, y, t, g, _ = {
+    var f, y, t, _ = {
         label: 0,
         sent: function() {
             if (t[0] & 1) throw t[1];
@@ -114,13 +114,17 @@ function _ts_generator(thisArg, body) {
         },
         trys: [],
         ops: []
-    };
-    return g = {
-        next: verb(0),
-        "throw": verb(1),
-        "return": verb(2)
-    }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-        return this;
+    }, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype), d = Object.defineProperty;
+    return d(g, "next", {
+        value: verb(0)
+    }), d(g, "throw", {
+        value: verb(1)
+    }), d(g, "return", {
+        value: verb(2)
+    }), typeof Symbol === "function" && d(g, Symbol.iterator, {
+        value: function() {
+            return this;
+        }
     }), g;
     function verb(n) {
         return function(v) {
@@ -132,7 +136,7 @@ function _ts_generator(thisArg, body) {
     }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while(_)try {
+        while(g && (g = 0, op[0] && (_ = 0)), _)try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [
                 op[0] & 2,
@@ -212,7 +216,6 @@ export var PexelsPhotoService = /*#__PURE__*/ function() {
         {
             key: "searchPhoto",
             value: function searchPhoto(params) {
-                var _this = this;
                 return _async_to_generator(function() {
                     var sParams, entries, i, _entries_i, k, v, response;
                     return _ts_generator(this, function(_state) {
@@ -228,7 +231,7 @@ export var PexelsPhotoService = /*#__PURE__*/ function() {
                                     4,
                                     fetch("".concat(API_BASE_URL, "/v1/search?").concat(sParams.toString()), {
                                         headers: {
-                                            Authorization: _this.__token
+                                            Authorization: this.__token
                                         }
                                     })
                                 ];
@@ -246,7 +249,7 @@ export var PexelsPhotoService = /*#__PURE__*/ function() {
                                 ];
                         }
                     });
-                })();
+                }).call(this);
             }
         }
     ]);
